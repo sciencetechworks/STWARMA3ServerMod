@@ -1,0 +1,27 @@
+//if !hasInterface exitWith {};
+
+waitUntil {alive player;};
+sleep 5;
+
+hint "BEWARE! The enemy may be hearing you.";
+
+
+stwf_notifyServerPlayerTalking=
+{
+	_player=_this select 0;
+	_talking=_this select 1;
+	_playerName=name _player;
+	if (alive _player) then
+	{
+		if(_talking)then{
+				_msg=format ["%1 is making noises.", _playerName];
+				diag_log _msg;
+				STWBroadcastAIHearing=_player;
+				publicVariableServer "STWBroadcastAIHearing";
+				};
+	};
+};
+
+["STWAIEARS", "OnSpeak", {
+	_this call stwf_notifyServerPlayerTalking
+}, Player] call TFAR_fnc_addEventHandler;

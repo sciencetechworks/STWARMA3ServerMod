@@ -17,38 +17,28 @@ _stwfRefreshAirTrafficWaypoint=
 	_selectedPositions=[];
 	_previousPosition= getPos _leader;
 	_firstPosition=_previousPosition;
-	for [{_i=0}, {_i<8}, {_i=_i+1}] do
+	_destinationPosition=nil;
+	//  waitUntil {(count allPlayers) > 0};
+	_nearbyCities=[_previousPosition,worldSize] call stwf_getNearbyStrategicalPointsOfInterest;
+	_destinationCity=selectRandom _nearbyCities;  
+	_nearRoads=nil;
+	if (!isNil("_destinationCity")) then
 	{
-	  waitUntil {(count allPlayers) > 0};
-	  _nearbyCities=[_previousPosition,10000] call stwf_getNearbyStrategicalPointsOfInterest;
-	  _destinationCity=selectRandom _nearbyCities;
-	  _destinationPosition=nil;
-	  _nearRoads=nil;
-	  if (!isNil("_destinationCity")) then
-	  {
 		_destinationPosition= _destinationCity call stwf_getCityPosition;
 		_nearRoads= _destinationPosition nearRoads 200;
-	  };
+	};
 	  
-	  if (!isNil "_nearRoads") then
-	  {
+	if (!isNil "_nearRoads") then
+	{
 	   if (count _nearRoads>0) then
 	   {
 	  	 _destinationRoad=selectRandom _nearRoads;
 	  	 _destinationPosition=getPos _destinationRoad;
 		};
-	  };
+	};
 	  	  
-	  /*if (!isNil("_destinationPosition")) then
-	  {
-		_distanceFromPlayers=[_destinationPosition] call stwf_getMinimumDistanceToPlayers;
-		if (_distanceFromPlayers>STW_MAXDIST_PLAYERS_FOR_SQUADS_WPTS) then
-		{
-			_destinationPosition=nil;
-		};
-	  };*/
 	  
-	  if (!isNil "_destinationPosition") then
+	  /*if (!isNil "_destinationPosition") then
 		{
 			_posA=getPos _leader;
 			_posB=_destinationPosition;
@@ -67,35 +57,28 @@ _stwfRefreshAirTrafficWaypoint=
 				_intersects=_info call stwf_CircleLineIntersection;
 				if (_intersects ) exitWith{_destinationPosition=nil};
 			} foreach _forbiddenZones;
-		};
+		};*/
 
-	  if (!isNil("_destinationPosition")) then
-	  {
-	   //diag_log format ["WP Destination %1",_destinationPosition];
-	    _height = getTerrainHeightASL _destinationPosition;
+	if (!isNil("_destinationPosition")) then
+	{
+	  //diag_log format ["WP Destination %1",_destinationPosition];
+		_height = getTerrainHeightASL _destinationPosition;
 		_flyHeight = (random 200)+(_height+50);
 		_position3D = [_destinationPosition select 0,_destinationPosition select 1, _flyHeight ];
 		_destinationPosition=_position3D;
-	    _selectedPositions pushBack _destinationPosition;
-	    _previousPosition=_destinationPosition;
-	  };
 	};
 	
-	_selectedPositions=[_selectedPositions] call stwf_orderPointsByDistancesToFirst;
-	// close the circular path:
-	_selectedPositions pushBack _firstPosition;
-	
-	_index=0;
-	_wpoint=nil;
+	if (isNil("_destinationPosition")) then
 	{
-	  _wpPosition=_x;
-	  _wpoint=_grp addWaypoint [_wpPosition, _index];
-      _wpoint setWaypointType "Move";
-	  _index=_index+1;
-	  //diag_log format ["WP Added %1",_wpPosition];
-	} forEach _selectedPositions;
+	  _destinationPosition=[worldSize/2,worldSize/2];
+	};
+	 
+	_wpoint=nil;
+	_wpPosition=_destinationPosition;
+	_wpoint=_grp addWaypoint [_wpPosition, 0];
+    _wpoint setWaypointType "Move";
+	//diag_log format ["Aircraft WP Added %1",_wpPosition];
 	
-	//Add script to the last waypoint
 	if (!isNil("_wpoint")) then
 	{
 	 _execScript=

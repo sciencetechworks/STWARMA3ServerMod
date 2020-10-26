@@ -8,7 +8,7 @@ _stwfRefreshPatrolSquadWaypoint=
 	_leader = leader _grp;
 	_selectedPositions=[];
 	_previousPosition= getPos _leader; //(selectRandom allPlayers);
-	for [{_i=0}, {_i<4}, {_i=_i+1}] do
+	for [{_i=0}, {_i<1}, {_i=_i+1}] do
 	{
 	  waitUntil {(count allPlayers) > 0};
 	  _nearbyCities=[_previousPosition,1000] call stwf_getNearbyStrategicalPointsOfInterest;

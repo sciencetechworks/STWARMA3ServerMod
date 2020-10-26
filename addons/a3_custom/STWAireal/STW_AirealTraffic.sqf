@@ -14,24 +14,9 @@ stwf_getRandomAircraftClassName=
 };
 
 
-STW_DEBUG=true;
-dinfo={
- if (STW_DEBUG) then
- {
-	diag_log _this;
- };
-};
 
-STWG_AIR_TO_PLAYER_MIN_DIST_TO_JOIN_PLAYER_GROUP=5;
-STWG_AIR_TO_PLAYER_MIN_DIST_TO_LEAVE_PLAYER_GROUP=10;
-
-
-
-//////
-
-
-/////
-stw_spawnAirTrafficVehicle=
+// Spawn a random aircraft at the given position
+stwf_spawnAirTrafficVehicle=
 {
     params ["_vehPos"];
 	
@@ -58,35 +43,7 @@ stw_spawnAirTrafficVehicle=
 	};
 	_grp execVm _scriptPath;
 	
-	// SPAWN SPEED LIMITER
-	_veh spawn 
-	{		
-		_veh=_this;
 		
-		//Get the forbiddenAirTrafficMarkers
-		_stwf_getForbiddenTrafficMarkers=
-		{
-			_zoneMarkers = [];
-			{
-			  _marker=_x;
-			  _arr = toArray _marker;
-			  _markerName=toString _arr;
-			  //diag_log format ["Checking %1",_markerName];
-				if(_markerName find "NOAIRTraffic">=0) then {
-					_zoneMarkers pushBack _marker;
-					//diag_log format ["added %1!",_markerName]
-				};
-			} foreach allMapMarkers;
-			_zoneMarkers;
-		};
-
-		while {alive _veh} do
-		{
-			sleep 2;
-		};
-	};
-	
-	
 	_veh spawn 
 	{
 		_stwfDeleteVehicleGroupWithCrew={
@@ -116,36 +73,19 @@ stw_spawnAirTrafficVehicle=
 			_driver =_veh getVariable "DrivenBy";
 			_driver assignAsDriver _veh;
 			[_driver] orderGetIn true;
-		//	_oldPosition= getPos _veh;
+		
 			if (fuel _veh<=0) then
 			{
 				sleep 240;
 				_veh call _stwfDeleteVehicleGroupWithCrew;
 			};
 			sleep 60;
-		//	_position= getPos _veh;
-		//	_checkDistance=_position distance _oldPosition;
-		//	_minDistToPlayers=[getPos _veh] call stwf_getMinimumDistanceToPlayers;
-        //
-		//	if (( _checkDistance < 5)&&(_minDistToPlayers>800)) then
-		//	{
-		//		//diag_log format ["Vehicle not moving, delete"];
-		//		_veh call _stwfDeleteVehicleGroupWithCrew;
-		//		sleep 20;
-		//	}; 
-		//	_minDistToPlayers=[getPos _veh] call stwf_getMinimumDistanceToPlayers;
-		//	if (_minDistToPlayers>STW_MAX_DISTANCE_FROM_PLAYERS_FOR_AIR_TRAFFIC) then
-		//	{
-		//		diag_log format ["Vehicle too far from players, delete"];
-		//		_veh call _stwfDeleteVehicleGroupWithCrew;
-		//		sleep 20;
-		//	};
-		
 		};
 		sleep 30; //after the death of the vehicle, it dissapears
 		_veh call _stwfDeleteVehicleGroupWithCrew;
 		sleep 5;
 		
+/*
 		 // Clean drivers with no vehicle
 		  {
 			_pilot=_x;
@@ -160,13 +100,13 @@ stw_spawnAirTrafficVehicle=
 				sleep 1;
 			};
 		  } forEach STW_AIR_TRAFFIC_ALIVE_AIRS;
-		
+*/		
 	};
 	_veh;
 };
 
 STW_AIR_TRAFFIC_ALIVE_VEHICLES=[];
-STW_AIR_TRAFFIC_ALIVE_AIRS=[];
+//STW_AIR_TRAFFIC_ALIVE_AIRS=[];
 
 //Get the forbiddenAirTrafficMarkers
 stwf_getForbiddenTrafficMarkers=
@@ -181,16 +121,19 @@ stw_controlAirTraffic=
 	{
 	 waitUntil {count allPlayers>0};
 	 _retries=0;
-	 while {(count STW_AIR_TRAFFIC_ALIVE_VEHICLES<STWG_NUM_AIR_TRAFFIC_VEHICLES)&& (_retries<9)} do
-	 {
+	 //while {(count STW_AIR_TRAFFIC_ALIVE_VEHICLES<STWG_NUM_AIR_TRAFFIC_VEHICLES)&& (_retries<9)} do
+	 //{
 	  //_playerPos=(getPos selectRandom allPlayers);
 	  //_octoPos=[_playerPos,STW_MAX_DISTANCE_FROM_PLAYERS_FOR_AIR_TRAFFIC] call stwf_getOctogonalPositionsSurroundingPlayer;
 	  //_position= selectRandom _octoPos;
-	  _position= [] call stwf_getRandomPosition2D;
+	  //_position= [] call stwf_getRandomPosition2D;
+	  _angle=floor random 360;
+	  _position=[worldSize*sin _angle,worldSize*cos _angle];
+	  diag_log format ["Random starting position for aircraft=%1",_position];
 	  _height = getTerrainHeightASL _position;
 	  _position3D = [_position select 0,_position select 1, (random 100)+(_height+300) ];
 	  
-	  _inForbiddenZone=false;
+	  /*_inForbiddenZone=false;
 	  _forbiddenAirTrafficMarkers=[] call stwf_getForbiddenTrafficMarkers;
 	  {
 		_markerPos=getMarkerPos _x;
@@ -200,16 +143,17 @@ stw_controlAirTraffic=
 	  {
 		_position=nil;
 	  };
+	  */
 	  
 	  if (!(isNil("_position"))) then
 	  {
-			_veh= [_position3D] call stw_spawnAirTrafficVehicle;
+			_veh= [_position3D] call stwf_spawnAirTrafficVehicle;
 			STW_AIR_TRAFFIC_ALIVE_VEHICLES pushBack _veh;
-			STW_AIR_TRAFFIC_ALIVE_AIRS pushBack (driver _veh);
+			//STW_AIR_TRAFFIC_ALIVE_AIRS pushBack (driver _veh);
 	  };
-	  _retries=_retries+1;
-	  sleep 2;
-	 };
+	  //_retries=_retries+1;
+	  //sleep 2;
+	 //};
 	  sleep 10;
 	  //Delete dead vehicles so that they are created in the next loop
 	  {

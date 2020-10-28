@@ -76,7 +76,23 @@ _stwfRefreshAirTrafficWaypoint=
 	_wpoint=nil;
 	_wpPosition=_destinationPosition;
 	_wpoint=_grp addWaypoint [_wpPosition, 0];
-    _wpoint setWaypointType "Move";
+	_rnd=floor random 100;
+	
+	_wpoint setWaypointType "Move";
+	
+	if (_rnd>75) then
+	{
+		_wpoint setWaypointType "Loiter";
+		_wpoint setWaypointLoiterRadius (floor random 300)+50; 
+	};
+	
+	if (_rnd>97) then
+	{
+	    _wpoint setWaypointType "Land";
+		diag_log "Landing!";
+	}; 
+	
+	 
 	//diag_log format ["Aircraft WP Added %1",_wpPosition];
 	
 	if (!isNil("_wpoint")) then
@@ -89,7 +105,7 @@ _stwfRefreshAirTrafficWaypoint=
 	 };
 	 _wpoint setWaypointStatements ["true", _execScript];
 	};
-	
+	sleep (floor random 300)+120;
 };
 
 _this call _stwfRefreshAirTrafficWaypoint;

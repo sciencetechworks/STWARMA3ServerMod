@@ -12,7 +12,7 @@ STWG_PROBABILITY_OF_A_POI_TO_BE_CONFICT_ZONE=75;
 /**
  Maximum number of patrolling squads on map.
 **/
-STWG_NUM_PATROLLING_SQUADS=12;
+STWG_NUM_PATROLLING_SQUADS=8;
 /**
  Patrolling squads generation probability matrix
 **/
@@ -21,7 +21,12 @@ STWG_PATROL_SQUADS_SIDE_PROBABILITY=[EAST,EAST,EAST,WEST];
 /**
  Maximum number of combat air vehicles patrolling on map
 **/
-STWG_NUM_AIR_TRAFFIC_VEHICLES=4;
+STWG_NUM_AIR_TRAFFIC_VEHICLES=5;
+
+/**
+Maximum number of combat boats patrolling on map
+**/
+STWG_NUM_WATER_TRAFFIC_VEHICLES=5;
 
 /**
  Water Areas becomes ready once the water zones algorithm has finished
@@ -163,6 +168,16 @@ STWG_PossibleAirVehicles=[
 	"rhs_ka60_c",
 	"rhs_mi28n_vvsc",
 	"O_Heli_Light_02_dynamicLoadout_F",
+	"RHS_Mi24P_vdv",
+	"RHS_Mi24V_vdv",
+	"RHS_Ka52_vvsc",
+	"rhs_ka60_c",
+	"rhs_mi28n_vvsc",
+	"RHS_Mi24P_vdv",
+	"RHS_Mi24V_vdv",
+	"RHS_Ka52_vvsc",
+	"rhs_ka60_c",
+	"rhs_mi28n_vvsc",
 	"RHS_Mi24P_vdv",
 	"RHS_Mi24V_vdv",
 	"RHS_Ka52_vvsc",

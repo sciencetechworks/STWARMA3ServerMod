@@ -180,6 +180,7 @@ if (STWG_MARKSMEN_IN_WATCH_TOWERS_BOOL) then
 
 
 [[], "a3_custom\STWAireal\STW_AirealTraffic.sqf" ] call stwf_execVm;
+[[], "a3_custom\STWWater\STW_WaterTraffic.sqf" ] call stwf_execVm;
 //[[], "a3_custom\STWAIHearing\STW_AIHearing.sqf"] call stwf_execVm;
 if (STWG_WEAR_ENEMY_NIGHT_STUFF_BOOL) then
 {
@@ -192,12 +193,13 @@ if (STWG_WEAR_ENEMY_NIGHT_STUFF_BOOL) then
 [[], "a3_custom\STWwater\STW_WaterUtils.sqf"] call stwf_execVm;
 //[] execVm "a3_custom\STWwater\STW_WaterUtils.sqf";
 
+/*
 diag_log "Launching boats";
 for [{_i=0},{_i<STWG_NUMBER_OF_COMBAT_BOATS},{_i=_i+1}] do
 {
 	[[], "a3_custom\STWwater\STWSpawnEnemyShip.sqf"] call stwf_execVm;
 };
-
+*/
 
 _str=format ["STWG_UNITRADAR_INFO_BOOL=%1",STWG_UNITRADAR_INFO_BOOL];
 diag_log _str;

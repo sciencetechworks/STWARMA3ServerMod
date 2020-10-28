@@ -61,7 +61,8 @@ _stwfRefreshPatrolSquadWaypoint=
 	{
 	  _wpPosition=_x;
 	  _wpoint=_grp addWaypoint [_wpPosition, _index];
-      _wpoint setWaypointType "Move";
+      _wpoint setWaypointType "Loiter";
+	  _wpoint setWaypointLoiterRadius (floor random 300)+50;
 	  _index=_index+1;
 	  //diag_log format ["WP Added %1",_wpPosition];
 	} forEach _selectedPositions;
@@ -77,6 +78,7 @@ _stwfRefreshPatrolSquadWaypoint=
 	 };
 	 _wpoint setWaypointStatements ["true", _execScript];
 	};
+	sleep (floor random 300)+120;
 };
 
 [_this] call _stwfRefreshPatrolSquadWaypoint;

@@ -182,13 +182,13 @@ stwf_controlPatrollingSquadsService=
 	 };
 	  sleep 30;
 	  //Delete dead vehicles so that they are created in the next loop
-	  /*{
+	  {
 		_grp=_x;
 		if ((count units _grp)<1) then
 		{
 		 _index =STW_ACTIVE_PATROLLING_SQUADS find _grp;
 		 STW_ACTIVE_PATROLLING_SQUADS deleteAt _index;
-		 _minDistToPlayers=[getPos (leader _grp)] call stwf_getMinimumDistanceToPlayers;
+		 /*_minDistToPlayers=[getPos (leader _grp)] call stwf_getMinimumDistanceToPlayers;
 		 if (_minDistToPlayers>STW_MAXDISTPLAYERSTOSQUADS) then
 			{
 				//diag_log format ["Squad too far from players, delete"];
@@ -197,9 +197,9 @@ stwf_controlPatrollingSquadsService=
 					_x setDamage [1,false];
 				} forEach units _grp;
 				deleteGroup _grp;
-			};
+			};*/
 		};
-	  } forEach STW_ACTIVE_PATROLLING_SQUADS; */
+	  } forEach STW_ACTIVE_PATROLLING_SQUADS; 
 	};
 	//sleep 60;
 };

@@ -176,7 +176,7 @@ if (STWG_MARKSMEN_IN_WATCH_TOWERS_BOOL) then
 //[[], "a3_custom\STWArmouredTraffic\STW_ArmouredTraffic.sqf" ] call stwf_execVm;
 //[] execvm  "a3_custom\STWAnimals\STWAnimals.sqf";
 //[] execVM "a3_custom\STWCivilTrafic\STW_CivilTrafic.sqf";
-//[] execvm "a3_custom\STWLand\STW_ThingsToBlowUp.sqf";
+[] execvm "a3_custom\STWLand\STW_ThingsToBlowUp.sqf";
 
 
 [[], "a3_custom\STWAireal\STW_AirealTraffic.sqf" ] call stwf_execVm;

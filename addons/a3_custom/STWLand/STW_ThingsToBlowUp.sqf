@@ -12,6 +12,7 @@ stwf_launchBlowUpMission=
  diag_log format ["Destroy MISSION %1 has been created.",_missionName];
  
   //"C_IDAP_Truck_02_water_F"
+  /*
  _vehclass="Land_Balloon_01_water_F";
  //_vehclass="SatchelCharge_Remote_Ammo_Scripted";
  _dummy=createVehicle [_vehclass,_position2D,[],0,"NONE"];
@@ -22,6 +23,7 @@ stwf_launchBlowUpMission=
  _dummy enableDynamicSimulation true;
  //hideObject _dummy;
  //hideObjectGlobal _dummy;
+ */
  
  [_missionTask,_vehicle,_dummy] spawn 
  {
@@ -31,7 +33,7 @@ stwf_launchBlowUpMission=
  	_taskName=_taskInfo select 0;
 	_position=_taskInfo select 4;
 		
-	while {alive _dummy} do
+	while {alive _vehicle} do
 	{
 	 if (!alive _vehicle) exitWith{true;};
  	 sleep 5;

@@ -29,6 +29,11 @@ Maximum number of combat boats patrolling on map
 STWG_NUM_WATER_TRAFFIC_VEHICLES=5;
 
 /**
+Maximum generated tasks
+**/
+STWG_NUMBER_OF_TASKS=6;
+
+/**
  Water Areas becomes ready once the water zones algorithm has finished
 **/
 STWG_WATER_AREAS_LIST_READY=false;

@@ -490,7 +490,7 @@ stwf_GenerateCitiesMissionsTasks=
 				_newMissions=[west];
 				_missionName="";
 				//STW_TASKS_BRIEFING pushBack [_cityName,_cityName];
-				_missiontype=selectRandom [1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,4,4,4,6,6,6,6,7,7,8,8,8,8,8,8,8]; //,5,5];
+				_missiontype=selectRandom [1,2,3,4,5,6,7,8];
 				
 				if (_missiontype==1) then
 				{ 
@@ -675,7 +675,7 @@ stwf_GenerateCitiesMissionsTasks=
 			};
 
 			_pendingTasks=[] call stwf_NumberOfPendingTasks;
-			while {_pendingTasks>4} do
+			while {_pendingTasks>STWG_NUMBER_OF_TASKS} do
 			{
 				sleep 120;
 				_pendingTasks=[] call stwf_NumberOfPendingTasks;

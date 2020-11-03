@@ -564,14 +564,26 @@ stwf_GenerateCitiesMissionsTasks=
 				
 				if (_missiontype==5) then
 				{ 
-					_position=[] call stwf_getRandomPosition;
+					/*_position=[] call stwf_getRandomPosition;
 					_retries=0;
-					while {(surfaceIsWater _position)&&(retries<25)} do
+					while {(surfaceIsWater _position)&&(retries<1000)} do
 					{
 					 _position=[] call stwf_getRandomPosition;
 					 _retries=_retries+1;
+					 sleep 0.25;
+					};*/
+					_count=_count+1;
+					_position=[nil, ["water"]] call BIS_fnc_randomPos;
+					if (!(surfaceIsWater _position)) then
+					{
+					    _grp=[EAST,_position] call stwf_generateSquad;
+						/*for "_i" from 1 to 4 do 
+						{
+						 _grp2=[EAST,_position] call stwf_generateSquad;
+						 (units _grp2) join _grp;
+						};*/
+						[_position] call stwf_generateBlowUpMission;
 					};
-					[_position] call stwf_generateBlowUpMission;
 				};
 				
 				
@@ -579,13 +591,14 @@ stwf_GenerateCitiesMissionsTasks=
 				{
 					_missionName="Recover vehicle at "+str _count;
 					_count=_count+1;
-					_position=[] call stwf_getRandomPosition;
+					/*_position=[] call stwf_getRandomPosition;
 					_retries=0;
 					while {(surfaceIsWater _position)&&(_retries<25)} do
 					{
 					 _position=[] call stwf_getRandomPosition;
 					 _retries=_retries+1;
-					};
+					};*/
+					_position=[nil, ["water"]] call BIS_fnc_randomPos;
 					if (!isNil "_position") then
 					{
 						_missionTask=[_missionName,_position,_cityName] call stwf_launchRecoverVehicle;
@@ -607,14 +620,16 @@ stwf_GenerateCitiesMissionsTasks=
 				if (_missiontype==7) then
 				{
 					_missionName="Recover helicopter at "+str _count;
-					_count=_count+1;
+					/*_count=_count+1;
 					_position=[] call stwf_getRandomPosition;
 					_retries=0;
 					while {(surfaceIsWater _position)&&(_retries<25)} do
 					{
 					 _position=[] call stwf_getRandomPosition;
 					 _retries=_retries+1;
-					};
+					};*/
+					_count=_count+1;
+					_position=[nil, ["water"]] call BIS_fnc_randomPos;
 					if (!isNil "_position") then
 					{
 						_missionTask=[_missionName,_position,_cityName] call stwf_launchRecoverHelicopter;
@@ -636,13 +651,15 @@ stwf_GenerateCitiesMissionsTasks=
 				
 				if (_missiontype==8) then
 				{
-				    _position=[] call stwf_getRandomPosition;					
+				    /*_position=[] call stwf_getRandomPosition;					
 					_retries=0;
 					while {(surfaceIsWater _position)&&(_retries<25)} do
 					{
 					 _position=[] call stwf_getRandomPosition;
 					 _retries=_retries+1;
-					};
+					};*/
+					_count=_count+1;
+					_position=[nil, ["water"]] call BIS_fnc_randomPos;
 					if (!isNil "_position") then
 					{
 						_eastUnits=[EAST,_position,2500] call stwf_selectAllUnitsOfSideInRange;

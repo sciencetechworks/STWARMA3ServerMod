@@ -9,7 +9,7 @@ If you try call compile and it all goes to shit, use execvm =P
 
 diag_log "Starting ScienceTechWorks Custom Content PBO";
 STWG_NO_ADDON_MODE=false;
-STWG_REALDATE_BOOL=false;
+STWG_REALDATE_BOOL=true;
 STWG_UNITRADAR_INFO_BOOL=false;
 STWG_EOS_CITIES_BOOL=false;
 STWG_MARKSMEN_IN_HIGH_BUILDINGS_BOOL=false;

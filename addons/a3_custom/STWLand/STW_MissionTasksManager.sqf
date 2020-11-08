@@ -490,7 +490,7 @@ stwf_GenerateCitiesMissionsTasks=
 				_newMissions=[west];
 				_missionName="";
 				//STW_TASKS_BRIEFING pushBack [_cityName,_cityName];
-				_missiontype=selectRandom [1,2,3,4,5,6,7,8];
+				_missiontype=selectRandom [1,2,2,2,3,4,5,6,7,8];
 				
 				if (_missiontype==1) then
 				{ 
@@ -516,9 +516,9 @@ stwf_GenerateCitiesMissionsTasks=
 					//{
 					_missionName="ClearBuilding"+str _count;
 					_count=_count+1;
-					//_position2D=[_position2D,2000] call stwf_selectTargetBuildingPosition;
-					_building=selectRandom STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
-					_position2D=getPos _building;
+					_position2D=[_position2D,2000] call stwf_selectTargetBuildingPosition;
+					//_building=selectRandom nearestBuilding _position2D; //STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
+					//_position2D=getPos _building;
 					_missionTask=[_missionName,_position2D,_cityName] call stwf_launchAttackBuildingMission;
 					//STW_MISSION_TASKS_WEST pushBack _missionTask;
 					_newMissions pushBack _missionTask;
@@ -530,9 +530,9 @@ stwf_GenerateCitiesMissionsTasks=
 				{ 
 					_missionName="DefendPosition"+str _count;
 					_count=_count+1;
-					//_position2D=[_position2D,5000] call stwf_selectTargetBuildingPosition;
-					_building=selectRandom STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
-					_position2D=getPos _building;
+					_position2D=[_position2D,5000] call stwf_selectTargetBuildingPosition;
+					//_building=selectRandom STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
+					//_position2D=getPos _building;
 					_missionTask=[_missionName,_position2D,_cityName] call stwf_launchDefendBuildingMission;
 					//STW_MISSION_TASKS_WEST pushBack _missionTask;
 					_newMissions pushBack _missionTask;

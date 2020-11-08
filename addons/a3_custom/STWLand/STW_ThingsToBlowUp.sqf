@@ -25,7 +25,7 @@ stwf_launchBlowUpMission=
  //hideObjectGlobal _dummy;
  */
  
- [_missionTask,_vehicle,_dummy] spawn 
+ [_missionTask,_vehicle,nil] spawn 
  {
  	_taskInfo=_this select 0;
 	_vehicle=_this select 1;

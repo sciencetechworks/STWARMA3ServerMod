@@ -201,6 +201,13 @@ stwf_launchRecoverHelicopter=
  _missionTask;
 };
 
+// Usage: private _buildings = [_center, _radius, ["Land_HouseV2_03", "Land_Nasypka"]] call FindEnterableBuildings;
+stwf_findEnterableBuildings = {	
+	params ["_center", "_radius", "_restricted"];	
+	nearestObjects [_center, ["house","building"], _radius] select {
+		[_x, 3] call BIS_fnc_isBuildingEnterable and {not (typeof _x in _restricted)}}
+};
+
 //[MissionName,position2D]
 stwf_launchAttackBuildingMission=
 {
@@ -214,15 +221,23 @@ stwf_launchAttackBuildingMission=
 	_position=_taskInfo select 4;
 	_started=false;
 	_grp=nil;	
-	_position= (nearestBuilding _position) buildingPos 0;
-					//////// GENERATE GROUP
-				_grp=[EAST,_position] call stwf_generateSquad;
-				/*for "_i" from 1 to 1 do 
+	//_position= (nearestBuilding _position) buildingPos 0;
+				//_randomPos = _position findEmptyPosition [0,500,"UH60M_EP1"];
+				//if (isNil "_randomPos") then
+				//{
+					_randomPos = ([[[_position, 200]],["water"]] call BIS_fnc_randomPos);
+				//};
+				// [center, minDist, maxDist, objDist, waterMode, maxGrad, shoreMode, blacklistPos, defaultPos] call BIS_fnc_findSafePos
+				//Find position minimum 1m from from position but not further than 150m, not closer than 3m to any other object, not in the water, maximum gradient of 20, not on the shoreline:
+				//_randomPos= = [_position2D, 1, 250, 3, 0, 0.2, 0] call BIS_fnc_findSafePos;
+				//////// GENERATE GROUP
+				_grp=[EAST,_randomPos] call stwf_generateSquad;
+				for "_i" from 1 to 2 do 
 				{
-				 _grp2=[EAST,_position] call stwf_generateSquad;
+				 _grp2=[EAST,_randomPos] call stwf_generateSquad;
 				 (units _grp2) join _grp;
-				};*/
-				(leader _grp) setPosATL _position;
+				};
+				(leader _grp) setPosATL _randomPos;
 				_WP001 = _grp addWaypoint [_position, 0];
 				_WP001 setWaypointType "HOLD";
 				sleep 10;
@@ -236,7 +251,7 @@ stwf_launchAttackBuildingMission=
 				_patrol	chance for each unit to patrol instead of garrison, true for default, false for 0% <NUMBER, BOOLEAN> (Default: 0.1)
 				_hold	chance for each unit to hold their garrison in combat, true for 100%, false for 0% <NUMBER, BOOLEAN> (Default: 0)
 				*/
-				[ _grp, _position, 50, 4, 0.1, 0.7] call CBA_fnc_taskDefend;
+				[ _grp, _position, 50, 4, 0.1, 0.8] call CBA_fnc_taskDefend;
 				//nul = [unit,radius,max units to garrison, max units per patrol,info] execVM "tog_garrison_script.sqf";
 				//[leader _grp]  execVM "a3_custom\STWGarrison\tog_garrison_script.sqf";
 				//[leader _grp,250,20,4,true]  execVM "a3_custom\STWGarrison\tog_garrison_script.sqf";
@@ -304,6 +319,7 @@ stwf_launchDefendBuildingMission=
 					_grps pushBack _grp;
 					_wpoint=_grp addWaypoint [_position, 10];
 					_wpoint setWaypointType "SAD";
+					[ _grp, _position, 150, 4, 0.1, 0.5] call CBA_fnc_taskDefend;
 					sleep (240+(floor random 120));
 				};
 				diag_log "Defend mission launched";
@@ -366,7 +382,7 @@ stwf_launchRearmMission=
 		 _grp2=[EAST,_position] call stwf_generateSquad;
 		 (units _grp2) join _grp;
 	};*/
-	
+	[_grp,_position,200, 7, "MOVE", "AWARE", "YELLOW", "FULL", "STAG COLUMN", "this call CBA_fnc_searchNearby", [3, 6, 9]] call CBA_fnc_taskPatrol;
 	_completed=false;
 	
  	while {!_completed} do
@@ -394,7 +410,20 @@ stwf_selectTargetBuildingPosition=
     params ["_position2D","_radius"];
 	_position2D=_this select 0;
 	_radius=_this select 1;
+	
+	/*
 	_enterableBuildings=[_position2D,_radius] call stwf_getAreaEnterableBuildings;
+	
+	_selectedBuilding=selectRandom _enterableBuildings;
+	if (!isNil("_selectedBuilding")) then
+	{
+		_position2D=getPos _selectedBuilding;
+		diag_log format ["Enterable building selected %1",_position2D];
+		
+	};
+	
+	_position2D;
+	
 	_nearestBuilding=nearestBuilding _position2D;
 	
 	if (!isNil("_nearestBuilding")) then
@@ -433,6 +462,10 @@ stwf_selectTargetBuildingPosition=
 		diag_log format ["Random Position selected %1",_position2D];
 		};
 	};
+	_position2D;
+	*/
+	_position2D = (selectRandom ([_position2D,_radius,["Land_HouseV2_03", "Land_Nasypka"]] call stwf_findEnterableBuildings)) buildingPos 0;
+	
 	_position2D;
 };
 
@@ -475,6 +508,8 @@ stwf_selectAllUnitsOfSideInRange={
  _result
 };
 
+
+
 stwf_GenerateCitiesMissionsTasks=
 {
 	[] spawn {
@@ -506,23 +541,19 @@ stwf_GenerateCitiesMissionsTasks=
 					 _grp2=[EAST,_position] call stwf_generateSquad;
 					 (units _grp2) join _grp;
 					};*/
+					[_grp,_position,200, 7, "MOVE", "AWARE", "YELLOW", "FULL", "STAG COLUMN", "this call CBA_fnc_searchNearby", [3, 6, 9]] call CBA_fnc_taskPatrol;
 					///////////////////////
 					_newMissions pushBack _missionTask;
 				}; 
 				
 				if (_missiontype==2) then
 				{ 
-					//for "_i" from 1 to 5 do 
-					//{
 					_missionName="ClearBuilding"+str _count;
 					_count=_count+1;
-					_position2D=[_position2D,2000] call stwf_selectTargetBuildingPosition;
-					//_building=selectRandom nearestBuilding _position2D; //STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
-					//_position2D=getPos _building;
+					_position2D=[_position2D,1000] call stwf_selectTargetBuildingPosition;
 					_missionTask=[_missionName,_position2D,_cityName] call stwf_launchAttackBuildingMission;
 					//STW_MISSION_TASKS_WEST pushBack _missionTask;
 					_newMissions pushBack _missionTask;
-					//};
 				}; 
 				
 				//for "_i" from 1 to 1 do 
@@ -530,9 +561,12 @@ stwf_GenerateCitiesMissionsTasks=
 				{ 
 					_missionName="DefendPosition"+str _count;
 					_count=_count+1;
-					_position2D=[_position2D,5000] call stwf_selectTargetBuildingPosition;
-					//_building=selectRandom STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
-					//_position2D=getPos _building;
+					_position2D=[_position2D,2000] call stwf_selectTargetBuildingPosition;
+					_building= nearestBuilding _position2D;//selectRandom STWG_HUGE_OR_TALL_BUILDINGS_OF_STRATEGICAL_INTEREST;
+					_building = nearestBuilding _position2D;
+					_buildings = [_position2D, 100, ["Land_HouseV2_03", "Land_Nasypka"]] call stwf_findEnterableBuildings;
+					_building= selectRandom _buildings; 
+					_position2D=getPos _building;
 					_missionTask=[_missionName,_position2D,_cityName] call stwf_launchDefendBuildingMission;
 					//STW_MISSION_TASKS_WEST pushBack _missionTask;
 					_newMissions pushBack _missionTask;
@@ -555,6 +589,7 @@ stwf_GenerateCitiesMissionsTasks=
 						 _grp2=[EAST,_position] call stwf_generateSquad;
 						 (units _grp2) join _grp;
 						};*/
+						[_grp,_position,200, 7, "MOVE", "AWARE", "YELLOW", "FULL", "STAG COLUMN", "this call CBA_fnc_searchNearby", [3, 6, 9]] call CBA_fnc_taskPatrol;
 						///////////////////////
 						//STW_MISSION_TASKS_WEST pushBack _missionTask;
 						_newMissions pushBack _missionTask;
@@ -577,6 +612,7 @@ stwf_GenerateCitiesMissionsTasks=
 					if (!(surfaceIsWater _position)) then
 					{
 					    _grp=[EAST,_position] call stwf_generateSquad;
+						[_grp,_position,200, 7, "MOVE", "AWARE", "YELLOW", "FULL", "STAG COLUMN", "this call CBA_fnc_searchNearby", [3, 6, 9]] call CBA_fnc_taskPatrol;
 						/*for "_i" from 1 to 4 do 
 						{
 						 _grp2=[EAST,_position] call stwf_generateSquad;
@@ -613,6 +649,7 @@ stwf_GenerateCitiesMissionsTasks=
 						 _grp2=[EAST,_position] call stwf_generateSquad;
 						 (units _grp2) join _grp;
 						};*/
+						[_grp,_position,200, 7, "MOVE", "AWARE", "YELLOW", "FULL", "STAG COLUMN", "this call CBA_fnc_searchNearby", [3, 6, 9]] call CBA_fnc_taskPatrol;
 						///////////////////////
 					};
 				};
@@ -640,6 +677,7 @@ stwf_GenerateCitiesMissionsTasks=
 						 _grp2=[EAST,_position] call stwf_generateSquad;
 						 (units _grp2) join _grp;
 						};*/
+						[_grp,_position,200, 7, "MOVE", "AWARE", "YELLOW", "FULL", "STAG COLUMN", "this call CBA_fnc_searchNearby", [3, 6, 9]] call CBA_fnc_taskPatrol;
 						///////////////////////
 
 						if (!isNil("_missionTask")) then

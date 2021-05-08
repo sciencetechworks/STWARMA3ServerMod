@@ -11,10 +11,12 @@ diag_log "Starting ScienceTechWorks Custom Content PBO";
 STWG_NO_ADDON_MODE=false;
 STWG_REALDATE_BOOL=false;
 STWG_UNITRADAR_INFO_BOOL=false;
-STWG_EOS_CITIES_BOOL=false;
+STWG_EOS_CITIES_BOOL=true;
 STWG_MARKSMEN_IN_HIGH_BUILDINGS_BOOL=false;
 STWG_MARKSMEN_IN_WATCH_TOWERS_BOOL=false;
-STWG_WEAR_ENEMY_NIGHT_STUFF_BOOL=true;
+STWG_WEAR_ENEMY_NIGHT_STUFF_BOOL=false;
+STWG_TASKMANAGER_BOOL=false;
+
 
 _script_handler =execvm "a3_custom\framework\STWCommon\STW_ScriptLauncher.sqf";
 waitUntil { scriptDone _script_handler };
@@ -156,6 +158,7 @@ diag_log "CREATING RESPAWN MARKERS";
 //[50,10] call compilefinal preprocessFileLineNumbers "a3_custom\STWFurniture\STW_Furniture.sqf";
 //call compilefinal preprocessFileLineNumbers "a3_custom\framework\HashMap\oo_hashmap.sqf";
 
+
 _str=format ["STWG_MARKSMEN_IN_HIGH_BUILDINGS_BOOL=%1",STWG_MARKSMEN_IN_HIGH_BUILDINGS_BOOL];
 diag_log _str;
 if (STWG_MARKSMEN_IN_HIGH_BUILDINGS_BOOL) then
@@ -176,7 +179,8 @@ if (STWG_MARKSMEN_IN_WATCH_TOWERS_BOOL) then
 //[[], "a3_custom\STWArmouredTraffic\STW_ArmouredTraffic.sqf" ] call stwf_execVm;
 //[] execvm  "a3_custom\STWAnimals\STWAnimals.sqf";
 //[] execVM "a3_custom\STWCivilTrafic\STW_CivilTrafic.sqf";
-[] execvm "a3_custom\STWLand\STW_ThingsToBlowUp.sqf";
+
+//[] execvm "a3_custom\STWLand\STW_ThingsToBlowUp.sqf";
 
 
 [[], "a3_custom\STWAireal\STW_AirealTraffic.sqf" ] call stwf_execVm;
@@ -210,6 +214,8 @@ if (STWG_UNITRADAR_INFO_BOOL) then
 
 [[],"a3_custom\STWEvents\STW_OnServerVariableReceived.sqf" ] call stwf_execVm;
 
-sleep 60;
-diag_log "Launching Task Manager";
-[[], "a3_custom\STWLand\STW_MissionTasksManager.sqf" ] call stwf_execVm;
+if (isDedicated && STWG_TASKMANAGER_BOOL) then {
+	sleep 60;
+	diag_log "Launching Task Manager";
+	[[], "a3_custom\STWLand\STW_MissionTasksManager.sqf" ] call stwf_execVm;
+};

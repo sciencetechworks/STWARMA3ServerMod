@@ -189,11 +189,11 @@ stwf_GenerateCitiesEOSMarkers=
 			
 			if (_zoneSide==EAST) then //RUSSIANS
 			{
-			 _nHouseInspection=selectRandom [2,2,2,3,4]; //ceil (_nEnterableBuildings/4);
-			 _nPatrols=selectRandom [2,2,2,3,4];
-			 _nMotorized=selectRandom [0,0,1,2];
-			 _nArmoured=selectRandom [0,0,0,1,2];
-			 _nStaticWeapons=selectRandom [0,1,2];
+			 _nHouseInspection= selectRandom [2,2,2,3,4,5]; //ceil (_nEnterableBuildings/4);
+			 _nPatrols=selectRandom [2,2,2,3,4,5];
+			 _nMotorized=selectRandom [0,1,2,3];
+			 _nArmoured=selectRandom [0,1,2];
+			 _nStaticWeapons=selectRandom [0,1,2,3,4,5];
 			 _nHelos=0;
 			};
 			
@@ -201,9 +201,9 @@ stwf_GenerateCitiesEOSMarkers=
 			{
 			 _nHouseInspection=selectRandom [1,2,3,4,5]; //ceil (_nEnterableBuildings/8);
 			 _nPatrols=selectRandom [1,2,3,4,5];
-			 _nMotorized=selectRandom [0,0,1,2];
-			 _nArmoured=selectRandom [0,0,0,1,2];
-			 _nStaticWeapons=selectRandom [0,1,2];
+			 _nMotorized=selectRandom [0,1,2];
+			 _nArmoured=selectRandom [0,0,1,2];
+			 _nStaticWeapons=selectRandom [0,1,2,3,4,5,6,7,8];
 			 _nHelos=0;
 			};
 			
@@ -224,11 +224,11 @@ stwf_GenerateCitiesEOSMarkers=
 			//if (_zoneSide==EAST) then
 			//{
 			null = [[_markerName],
-					/* house inspection */ [_nHouseInspection,_tinyGroup],
-					/* patrols */ [_nPatrols,_tinyGroup],
+					/* house inspection */ [_nHouseInspection,_tinyGroup,_highProbability],
+					/* patrols */ [_nPatrols,_tinyGroup,_medProbability],
 					/* motorized */ [_nMotorized,_tinyGroup,_medProbability],
-					/* armoured */ [_nArmoured,_oneMan,_lowProbability],
-					/* static weapons */ [_nStaticWeapons,_tinyGroup],
+					/* armoured */ [_nArmoured, _lowProbability],
+					/* static weapons */ [_nStaticWeapons,_highProbability],
 					/* helicopters */ [_nHelos,_normalGroup,_lowProbability],
 					/* Faction, marker type, distance, side, notactivated by fight,debug */ [_sideIdentifier,0,500,_zoneSide,FALSE,FALSE]] call EOS_Spawn;
 			//};
